@@ -1,0 +1,22 @@
+{
+  "name": "homebridge-controller",
+  "version": "1.0.0",
+  "description": "virtual remote controller for homebridge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GsppDPtr",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "homebridge"
+  ],
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.0"
+  }
+}
