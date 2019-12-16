@@ -18,8 +18,9 @@ function HomebridgeController(log, config) {
   this.name = config.name;
 
   this.services = [];
-  this.buttons = [];
+  //this.buttons = [];
 
+  /*
   var app = express();
   app.listen(config.port, () => console.log('Server started'));
 
@@ -33,6 +34,7 @@ function HomebridgeController(log, config) {
       .setValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
     res.status(200).json({status:"ok"});
   });
+  */
 
   const informationService = new Service.AccessoryInformation();
   informationService
@@ -57,24 +59,25 @@ function HomebridgeController(log, config) {
 
   const SINGLE = {
     minValue: Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS,
-    maxValue: Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS
+    maxValue: Characteristic.ProgrammableSwitchEvent.LONG_PRESS
   }
 
-  this.services.push(this.createButton(1, 'On', SINGLE));
-  this.services.push(this.createButton(2, 'Dim Up', SINGLE));
-  this.services.push(this.createButton(3, 'Dim Down', SINGLE));
-  this.services.push(this.createButton(4, 'Off', SINGLE));
+  for (var i = 0; i < config.buttons.length; i++) {
+    this.services.push(this.createButton(i+1, config.buttons[i].name, config.buttons[i].icon, SINGLE));
+  }
+  //this.services.push(this.createButton(2, 'Dim Up', SINGLE));
+  //this.services.push(this.createButton(3, 'Dim Down', SINGLE));
+  //this.services.push(this.createButton(4, 'Off', SINGLE));
 }
 
-HomebridgeController.prototype.createButton = function (buttonIndex, buttonName, props) {
-  const service = new Service.StatelessProgrammableSwitch(
-    this.name + ' ' + buttonName, buttonName
-  )
-  this.buttons[buttonIndex - 1] = service
+HomebridgeController.prototype.createButton = function (buttonIndex, buttonName, buttonIcon, props) {
+  const service = new Service.StatelessProgrammableSwitch(buttonName, buttonName);
+  //this.buttons[buttonIndex - 1] = service
   service.getCharacteristic(Characteristic.ProgrammableSwitchEvent)
-    .setProps(props)
+    .setProps(props);
   service.getCharacteristic(Characteristic.ServiceLabelIndex)
-    .setValue(buttonIndex)
+    .setValue(buttonIndex);
+  service.getCharacteristic(Characteristic.ConfiguredName).setValue(buttonIcon);
   return service;
 }
 
